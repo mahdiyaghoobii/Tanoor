@@ -1,10 +1,18 @@
 from django.contrib import admin
 from rest_framework.views import APIView
-from .models import Food
+from .models import Food, CustomUser
 from django.utils.safestring import mark_safe
 
 
 # Register your models here.
+
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'full_name', 'phone', 'is_active', 'is_staff', 'is_admin')
+    search_fields = ('full_name', 'phone')
+    list_filter = ('is_active', 'is_admin', 'is_active')
+    ordering = ('-id',)
+
 
 @admin.register(Food)
 class FoodAdmin(admin.ModelAdmin):
