@@ -66,15 +66,15 @@ class Slider(models.Model):
 class Food(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-    price = models.TextField()
-    stringPrice = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stringPrice = models.CharField(max_length=20)
     quantity = models.IntegerField()
     ingredients = models.TextField()
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
     rating = models.FloatField()
     comments = models.JSONField(
         default=list,  # پیش‌فرض را یک لیست خالی قرار می‌دهد
-        blank=True     # اجازه می‌دهد این فیلد خالی باشد
+        blank=True
     )
     type = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
