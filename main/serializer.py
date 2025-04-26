@@ -1,15 +1,22 @@
 from rest_framework import serializers
-from .models import Food
+from .models import Food ,Image
+from rest_framework import serializers
+from .models import CustomUser
+from django.contrib.auth import authenticate
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
 
 class FoodSerializer(serializers.ModelSerializer):
+    image = ImageSerializer()
     class Meta:
         model = Food
         fields = ('id', 'name', 'price', 'stringPrice' , 'quantity',
                   'ingredients', 'image', 'rating' ,'comments', 'type','created_at')
 
-from rest_framework import serializers
-from .models import CustomUser
-from django.contrib.auth import authenticate
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
