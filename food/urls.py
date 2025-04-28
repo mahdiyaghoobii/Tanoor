@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from main.views import RegisterView, LoginView
+from main.views import RegisterView, LoginView, LogoutView, RefreshAccessTokenView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -38,8 +38,10 @@ schema_view = get_schema_view(
 urlpatterns = [
 
 
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('register/', RegisterView.as_view(), name='register'), # {"phone": "09123456789", "full_name": "Ali Ahmadi", "password": "pass123"}
+    path('login/', LoginView.as_view(), name='login'), # {"phone": "09123456789", "password": "pass123"}
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('refresh/', RefreshAccessTokenView.as_view(), name='refresh_token'),
     path('admin/', admin.site.urls),
     path('api/', include('main.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
