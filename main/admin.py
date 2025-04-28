@@ -5,7 +5,6 @@ from django.utils.safestring import mark_safe
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from .models import Food, Order, OrderItem
-from .resources import FoodResource
 
 # Register your models here.
 
