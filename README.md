@@ -54,13 +54,13 @@
    ```
 
 7. **دسترسی به API:**
-   - لیست غذاها: `GET /foods/`
+   - لیست غذاها: `GET api/foods/`
+   - افزودن به سبد: `GET api/add-to-basket/<id>/`
+   - کاهش سبد: `GET api/decrease_basket/<id>/`
+   - پاک کردن سبد: `GET api/clear_basket/`
+   - ثبت سبد (نیاز به احراز هویت): `GET api/submit_basket/`
    - ثبت‌نام: `POST /register/`
    - ورود: `POST /login/`
-   - افزودن به سبد: `GET /add-to-basket/<id>/`
-   - کاهش سبد: `GET /decrease_basket/<id>/`
-   - پاک کردن سبد: `GET /clear_basket/`
-   - ثبت سبد (نیاز به احراز هویت): `GET /submit_basket/`
    - رفرش توکن دسترسی: `POST /refresh/`
    - خروج (نیاز به احراز هویت): `POST /logout/`
    - مستندات API (Swagger): `GET /swagger/`
