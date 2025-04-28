@@ -89,7 +89,7 @@ class Food(models.Model):
     def save(self, *args, **kwargs):
         price = self.price
         if price is not None:
-            self.stringPrice = str(price)
+            self.stringPrice = str(price//1000)
         super().save(*args, **kwargs)
 
 
