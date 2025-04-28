@@ -4,7 +4,7 @@ from .models import Food, CustomUser,Image
 from django.utils.safestring import mark_safe
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Food
+from .models import Food, Order
 from .resources import FoodResource
 
 # Register your models here.
@@ -46,8 +46,20 @@ class FoodAdmin(ImportExportModelAdmin):
 
     image_preview.short_description = 'تصویر'
 
-
-
+# @admin.register(Order)
+# class OrderAdmin(admin.ModelAdmin):
+#
+#     list_display = ('id', 'get_food', 'cost', 'created_at')
+#     search_fields = ('food__name',)
+#     list_filter = ('created_at',)
+#     ordering = ('-created_at',)
+#
+#     def get_food(self, obj):
+#         return ", ".join([Food.name for Food in obj.food.all()])
+#     get_food.short_description = 'Foods'
+#
+#     def get_user(self, obj):
+#         return obj.user.full_name
 
 # @admin.register(Food)
 # class FoodAdmin(ImportExportModelAdmin):
