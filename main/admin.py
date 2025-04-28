@@ -32,6 +32,7 @@ class FoodAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price', 'stringPrice' , 'quantity',
                   'ingredients', 'rating' ,'comments', 'type','created_at', 'image_preview')
     search_fields = ('name','ingredients','rating','comments')
+    list_editable = ('price', 'stringPrice', 'quantity')
     list_filter = ('type',)
     ordering = ('-created_at',)
     date_hierarchy = 'created_at'
