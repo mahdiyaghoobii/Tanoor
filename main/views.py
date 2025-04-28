@@ -185,7 +185,6 @@ class clear_basket(APIView):
 
 class submit_basket(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         if 'basket' not in request.session:
             return Response({"message": "Basket is empty."}, status=status.HTTP_404_NOT_FOUND)
