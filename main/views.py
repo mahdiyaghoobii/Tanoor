@@ -251,3 +251,15 @@ class FoodListView(APIView):
         foods = Food.objects.all()
         serializer = FoodSerializer(foods, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class FoodDetailView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def get(self, request: Request, id):
+        try:
+            food = Food.objects.get(id=id)
+            serializer = FoodSerializer(food)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({"message": "Food not found."}, status=status.HTTP_404_NOT_FOUND)
