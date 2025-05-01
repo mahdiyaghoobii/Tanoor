@@ -89,7 +89,7 @@ class Food(models.Model):
     def save(self, *args, **kwargs):
         price = self.price
         if price is not None:
-            self.stringPrice = str(price//1000)
+            self.stringPrice = str(price // 1000)
         super().save(*args, **kwargs)
 
 
@@ -103,13 +103,22 @@ class Order(models.Model):
     ]
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    food = models.ManyToManyField(Food, blank=True)
     order_date = models.DateTimeField(auto_now_add=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=status_choice, default='Pending')
+
     def __str__(self):
         return f"Order {self.id} by {self.user.full_name}"
 
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, default=0)
+    food = models.ForeignKey(Food, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.food.name} in Order {self.order.id}"
 
 class UserProfile(models.Model):
     id = models.AutoField(primary_key=True)
@@ -120,12 +129,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.full_name}'s Profile"
-
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    food = models.ForeignKey(Food, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # قیمت در زمان سفارش
-
-    def __str__(self):
-        return f"{self.quantity} x {self.food.name} in Order {self.order.id}"
