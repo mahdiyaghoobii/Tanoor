@@ -54,11 +54,14 @@
    ```
 
 7. **دسترسی به API:**
-   - لیست غذاها: `GET api/foods/`
-   - افزودن به سبد: `GET api/add-to-basket/<id>/`
-   - کاهش سبد: `GET api/decrease_basket/<id>/`
-   - پاک کردن سبد: `GET api/clear_basket/`
-   - ثبت سبد (نیاز به احراز هویت): `GET api/submit_basket/`
+   - لیست غذاها: `GET /api/foods/`
+   - جزئیات غذا: `GET /api/foods/<id>/`
+   - افزودن به سبد: `GET /api/add-to-basket/<id>/`
+   - کاهش سبد: `GET /api/decrease_basket/<id>/`
+   - پاک کردن سبد: `GET /api/clear_basket/`
+   - ثبت سبد (نیاز به احراز هویت): `GET /api/submit_basket/`
+   - لیست سفارشات و مشخصاتشان `GET /api/orders/`
+   - جزئیات سفارش: `GET /api/orders/<id>/`
    - ثبت‌نام: `POST /register/`
    - ورود: `POST /login/`
    - رفرش توکن دسترسی: `POST /refresh/`
@@ -68,9 +71,11 @@
 ### نکات
 
 - برای آپلود تصاویر، اطمینان حاصل کنید که `MEDIA_ROOT` و `MEDIA_URL` در `settings.py` تنظیم شده‌اند.
-- از ابزارهایی مانند Postman برای تست نقاط پایانی API استفاده کنید.
+- از ابزارهایی مانند Postman برای تست API endpoint استفاده کنید.
 - مستندات API از طریق Swagger در آدرس `/swagger/` قابل دسترسی است.
-- توکن‌های JWT برای احراز هویت استفاده می‌شوند. نقاط پایانی ثبت‌نام، ورود، رفرش توکن و لیست غذاها نیازی به احراز هویت ندارند. نقطه پایانی ثبت سبد و خروج نیاز به ارسال توکن دسترسی معتبر در هدر Authorization دارند (`Authorization: Bearer <access_token>`). Refresh Token به صورت خودکار از طریق کوکی HttpOnly مدیریت می‌شود.
+- توکن‌های JWT برای احراز هویت استفاده می‌شوند. endpoint ثبت‌نام (`/register/`)، ورود (`/login/`)، رفرش توکن (`/refresh/`) و لیست غذاها (`/api/foods/`) نیازی به احراز هویت ندارند.
+- endpoint ثبت سبد (`/api/submit_basket/`) و خروج (`/logout/`) نیاز به ارسال توکن دسترسی معتبر در هدر Authorization دارند (`Authorization: Bearer <access_token>`).
+- Refresh Token به صورت خودکار از طریق کوکی HttpOnly مدیریت می‌شود.
 
 ---
 
