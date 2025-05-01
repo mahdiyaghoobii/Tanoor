@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Food, Image
+from .models import Food, Image, Order, OrderItem
 from rest_framework import serializers
 from .models import CustomUser
 from django.contrib.auth import authenticate
@@ -18,6 +18,29 @@ class FoodSerializer(serializers.ModelSerializer):
         model = Food
         fields = ('id', 'name', 'price', 'stringPrice', 'quantity',
                   'ingredients', 'image', 'rating', 'comments', 'type', 'created_at')
+
+
+
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    food = FoodSerializer(read_only=True) # Use nested FoodSerializer for read operations
+    food_id = serializers.PrimaryKeyRelatedField(queryset=Food.objects.all(), source='food', write_only=True) # Use PrimaryKeyRelatedField for write operations
+    order = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all(), write_only=True) # Keep order as write_only if it's not needed in the item representation
+
+    class Meta:
+        model = OrderItem
+        # Include 'food' for nested details and 'food_id' for writing.
+        # 'order' is typically not included in the item representation itself.
+        fields = ('id', 'quantity', 'price', 'food', 'food_id', 'order')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True) # Represents the user ID
+    items = OrderItemSerializer(many=True, read_only=True, source='orderitem_set') # Nested serializer for order items
+
+    class Meta:
+        model = Order
+        fields = ('id', 'user', 'cost', 'status', 'order_date', 'items') # Add 'items' field
 
 
 class RegisterSerializer(serializers.ModelSerializer):
