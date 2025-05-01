@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Food, Order, OrderItem
-from .serializer import FoodSerializer, RegisterSerializer, LoginSerializer
+from .serializer import FoodSerializer, RegisterSerializer, LoginSerializer, OrderSerializer, OrderItemSerializer
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -212,20 +212,27 @@ class submit_basket(APIView):
                     'price': price
                 })
 
+
             # ایجاد سفارش
             order = Order.objects.create(
                 user=request.user,
                 cost=cost
             )
 
-            # افزودن اقلام به سفارش
+            # آماده‌سازی اقلام سفارش برای bulk_create
+            order_items_to_create = []
             for item in order_items:
-                OrderItem.objects.create(
-                    order=order,
-                    food=item['food'],
-                    quantity=item['quantity'],
-                    price=item['price']
+                order_items_to_create.append(
+                    OrderItem(
+                        order=order,
+                        food=item['food'],
+                        quantity=item['quantity'],
+                        price=item['price']
+                    )
                 )
+
+            # افزودن اقلام به سفارش با bulk_create
+            OrderItem.objects.bulk_create(order_items_to_create)
 
             # پاک کردن سبد خرید
             del request.session['basket']
@@ -263,3 +270,22 @@ class FoodDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response({"message": "Food not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class OrderListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request):
+        orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__food__image')
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class OrderDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request: Request, id):
+        try:
+            order = Order.objects.get(id=id, user=request.user)
+            serializer = OrderSerializer(order)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({"message": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
