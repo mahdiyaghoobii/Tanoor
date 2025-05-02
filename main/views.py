@@ -90,10 +90,9 @@ class LogoutView(APIView):
         except Exception as e:
             return Response({"error": "Invalid refresh token."}, status=status.HTTP_400_BAD_REQUEST)
 
-
 class add_basket(APIView):
-    # authentication_classes = []  # غیرفعال کردن JWT برای این ویو
-    # permission_classes = [AllowAny]  # اجازه دسترسی به همه کاربران
+    authentication_classes = []  # غیرفعال کردن JWT برای این ویو
+    permission_classes = [AllowAny]  # اجازه دسترسی به همه کاربران
 
     def get(self, request: Request, id):
         try:
@@ -136,8 +135,8 @@ class add_basket(APIView):
 
 
 class decrease_basket(APIView):
-    # authentication_classes = []
-    # permission_classes = [AllowAny]
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def get(self, request: Request, id):
         if 'basket' in request.session:
@@ -170,8 +169,8 @@ class decrease_basket(APIView):
 
 
 class clear_basket(APIView):
-    # authentication_classes = []
-    # permission_classes = [AllowAny]
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def get(self, request):
         if 'basket' in request.session:
@@ -184,7 +183,8 @@ class clear_basket(APIView):
 
 
 class submit_basket(APIView):
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = [AllowAny]
     def get(self, request):
         if 'basket' not in request.session:
             return Response({"message": "Basket is empty."}, status=status.HTTP_404_NOT_FOUND)
@@ -272,7 +272,8 @@ class FoodDetailView(APIView):
             return Response({"message": "Food not found."}, status=status.HTTP_404_NOT_FOUND)
 
 class OrderListView(APIView):
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def get(self, request: Request):
         orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__food__image')
@@ -280,7 +281,8 @@ class OrderListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class OrderDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def get(self, request: Request, id):
         try:
