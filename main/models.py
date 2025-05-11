@@ -68,7 +68,7 @@ class Slider(models.Model):
 
 
 class Food(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.CharField(max_length=10, primary_key=True)  # تغییر به CharField
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stringPrice = models.CharField(max_length=20)
@@ -76,10 +76,7 @@ class Food(models.Model):
     ingredients = models.TextField()
     image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True)
     rating = models.FloatField()
-    comments = models.JSONField(
-        default=list,  # پیش‌فرض را یک لیست خالی قرار می‌دهد
-        blank=True
-    )
+    comments = models.JSONField(default=list, blank=True)
     type = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -87,9 +84,8 @@ class Food(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        price = self.price
-        if price is not None:
-            self.stringPrice = str(price // 1000)
+        if self.price is not None:
+            self.stringPrice = str(int(self.price) // 1000)  # تبدیل به int برای جلوگیری از خطا
         super().save(*args, **kwargs)
 
 
